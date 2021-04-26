@@ -14,7 +14,7 @@ function App() {
     }, [darkMode]);
 
     return (
-        <div className={`App min-vh-100 min-vw-100 d-flex flex-column container ${darkMode ? "bg-dark text-light" : ""}`}>
+        <div className={`App min-vh-100 d-flex flex-column ${darkMode ? "bg-dark text-light" : ""}`}>
           <div className="container my-4">
             <h1 className="text-center">ToDos App</h1>
             <Todos darkMode={darkMode} />
