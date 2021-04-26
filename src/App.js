@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Todos from "./components/Todos";
 
 function App() {
-    const [darkMode, setDarkMode] = useState(false);
+    const getInitialMode = () => JSON.parse(window.localStorage.getItem("theme-mode")) || false;
+    const [darkMode, setDarkMode] = useState(getInitialMode);
 
     const handleCheckboxChange = (event) => {
         setDarkMode(event.target.checked);
     };
+
+    useEffect(() => {
+        window.localStorage.setItem("theme-mode", JSON.stringify(darkMode));
+    });
+
     return (
         <div className={`App min-vh-100 min-vw-100 d-flex flex-column container ${darkMode ? "bg-dark text-light" : ""}`}>
           <div className="container my-4">
