@@ -11,7 +11,7 @@ function App() {
 
     useEffect(() => {
         window.localStorage.setItem("theme-mode", JSON.stringify(darkMode));
-    });
+    }, [darkMode]);
 
     return (
         <div className={`App min-vh-100 min-vw-100 d-flex flex-column container ${darkMode ? "bg-dark text-light" : ""}`}>
