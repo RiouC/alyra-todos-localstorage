@@ -1,8 +1,8 @@
-import { useState } from "react"
-import TodosList from "./TodosList"
-import SelectTodos from "./SelectTodos"
-import AddTodoForm from "./AddTodoForm"
-import { v4 as uuidv4 } from "uuid"
+import { useEffect, useState } from "react";
+import TodosList from "./TodosList";
+import SelectTodos from "./SelectTodos";
+import AddTodoForm from "./AddTodoForm";
+import { v4 as uuidv4 } from "uuid";
 
 const initialTodos = [
   {
@@ -32,22 +32,23 @@ const initialTodos = [
   }
 ]
 
-const Todos = () => {
-  const [todos, setTodos] = useState(initialTodos)
-  const [filter, setFilter] = useState("all")
+const Todos = ({ darkMode }) => {
+  const getInitialTodos = () => JSON.parse(window.localStorage.getItem("todos-list")) || initialTodos;
+  const [todos, setTodos] = useState(getInitialTodos);
+  const [filter, setFilter] = useState("all");
 
   const addTodo = (text) => {
     const newTodo = {
       text,
       isCompleted: false,
       id: uuidv4()
-    }
-    setTodos([...todos, newTodo])
-  }
+    };
+    setTodos([...todos, newTodo]);
+  };
 
   const deleteTodo = (task) => {
-    setTodos(todos.filter((el) => el.id !== task.id))
-  }
+    setTodos(todos.filter((el) => el.id !== task.id));
+  };
 
   const toggleCompleteTodo = (task) => {
     setTodos(
@@ -56,12 +57,12 @@ const Todos = () => {
           return {
             ...el,
             isCompleted: !el.isCompleted
-          }
+          };
         }
         return el
       })
-    )
-  }
+    );
+  };
 
   const filteredTodos = todos.filter((el) => {
     if (filter === "completed") {
@@ -71,23 +72,36 @@ const Todos = () => {
       return !el.isCompleted
     }
     return true
-  })
+  });
 
-  const completedCount = todos.filter((el) => el.isCompleted).length
+  const completedCount = todos.filter((el) => el.isCompleted).length;
+
+  useEffect(() => {
+    const uncompletedCount = todos.filter((el) => !el.isCompleted).length;
+    document.title = todos.length === 0 ?
+      "Que devez vous faire aujourd'hui ?" :
+      `Vous avez ${uncompletedCount} tâches à accomplir`
+  }, [todos]);
+
+  useEffect(() => {
+    window.localStorage.setItem("todos-list", JSON.stringify(todos))
+  }, [todos]);
+
   return (
     <main>
       <h2 className="text-center">
         Ma liste de tâches ({completedCount} / {todos.length})
       </h2>
-      <SelectTodos filter={filter} setFilter={setFilter} />
+      <SelectTodos filter={filter} setFilter={setFilter} darkMode={darkMode}/>
       <TodosList
         todos={filteredTodos}
         deleteTodo={deleteTodo}
         toggleCompleteTodo={toggleCompleteTodo}
+        darkMode={darkMode}
       />
-      <AddTodoForm addTodo={addTodo} setFilter={setFilter} />
+      <AddTodoForm addTodo={addTodo} setFilter={setFilter} darkMode={darkMode} />
     </main>
-  )
-}
+  );
+};
 
-export default Todos
+export default Todos;

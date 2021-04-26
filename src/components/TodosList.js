@@ -1,4 +1,4 @@
-import Todo from "./Todo"
+import Todo from "./Todo";
 
 const TodosList = (props) => {
   const { todos, deleteTodo, toggleCompleteTodo } = props
@@ -10,8 +10,8 @@ const TodosList = (props) => {
         deleteTodo={deleteTodo}
         toggleCompleteTodo={toggleCompleteTodo}
       />
-    )
-  })
-}
+    );
+  });
+};
 
-export default TodosList
+export default TodosList;
